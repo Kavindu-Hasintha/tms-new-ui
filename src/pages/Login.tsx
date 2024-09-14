@@ -1,18 +1,21 @@
 import React from "react";
 import {Box, Button, Stack, TextField, Typography} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import {ROUTES} from "../const/Routes.ts";
 
 const Login = () => {
+    const navigate = useNavigate();
 
     function handleLogIn() {
         console.log("log in...");
     }
 
     function handleForgotPassword() {
-        console.log("forgot password...");
+        navigate('/' + ROUTES.OTP, { replace: true });
     }
 
     function handleCreateAccount() {
-        console.log("create account...");
+        navigate('/' + ROUTES.SIGNUP, { replace: true });
     }
 
     return (

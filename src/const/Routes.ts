@@ -1,5 +1,6 @@
 export const ROUTES = {
     ROOT: '/',
     LOGIN: 'login',
-    SIGNUP: 'signup'
+    SIGNUP: 'signup',
+    OTP: 'otp-page'
 }
