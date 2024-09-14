@@ -91,6 +91,7 @@ const OTPPage: FC = (props: any) => {
                             <TextField id="standard-basic" label="Re-enter password" variant="standard" type="password" />
 
                             <Button
+                                variant="outlined"
                                 sx={{
                                     textTransform: "none"
                                 }}
