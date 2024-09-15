@@ -1,13 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import {Box, Button, Stack, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {ROUTES} from "../const/Routes.ts";
+import {IUserSignup} from "../interfaces/IUserSignup.ts";
 
 const Signup = () => {
     const navigate = useNavigate();
+    const [ userData, setUserData ] = useState<IUserSignup>({
+        fullName: "",
+        email: "",
+        username: "",
+        password: "",
+        rePassword: "",
+        address: ""
+    });
+
+    function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
+        const { name, value } = event.target;
+        setUserData({ ...userData, [name]: value });
+    }
 
     function handleSignup() {
-
+        console.log("data = ", userData);
     }
 
     function handleGoToLogin() {
@@ -44,12 +58,57 @@ const Signup = () => {
                             SignUp
                         </Typography>
 
-                        <TextField id="standard-basic" label="Full Name" variant="standard" />
-                        <TextField id="standard-basic" label="Email" variant="standard" type="email" />
-                        <TextField id="standard-basic" label="Username" variant="standard" />
-                        <TextField id="standard-basic" label="Password" variant="standard" type="password" />
-                        <TextField id="standard-basic" label="Re-Password" variant="standard" type="password" />
-                        <TextField id="standard-basic" label="Address" variant="standard" />
+                        <TextField
+                            id="fullName"
+                            label="Full Name"
+                            variant="standard"
+                            name={"fullName"}
+                            value={userData.fullName}
+                            onChange={handleInput}
+                        />
+                        <TextField
+                            id="email"
+                            label="Email"
+                            variant="standard"
+                            name={"email"}
+                            value={userData.email}
+                            onChange={handleInput}
+                            type="email"
+                        />
+                        <TextField
+                            id="username"
+                            label="Username"
+                            variant="standard"
+                            name={"username"}
+                            value={userData.username}
+                            onChange={handleInput}
+                        />
+                        <TextField
+                            id="password"
+                            label="Password"
+                            variant="standard"
+                            name={"password"}
+                            value={userData.password}
+                            onChange={handleInput}
+                            type="password"
+                        />
+                        <TextField
+                            id="rePassword"
+                            label="Re-Password"
+                            variant="standard"
+                            name={"rePassword"}
+                            value={userData.rePassword}
+                            onChange={handleInput}
+                            type="password"
+                        />
+                        <TextField
+                            id="standard-basic"
+                            label="Address"
+                            variant="standard"
+                            name={"address"}
+                            value={userData.address}
+                            onChange={handleInput}
+                        />
 
                         <Button
                             variant="outlined"
