@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 export interface LoginSignupState {
     isLoading: boolean;
@@ -33,8 +34,9 @@ export const loginSignupSlice = createSlice({
             userLoginResponse: null,
         }),
         loginSuccess: (state, action: PayloadAction<any>) => {
-            // add user data to local storage
-            // set cookies for refresh token and access token
+            localStorage.setItem("user", JSON.stringify(action.payload.data?.user_details));
+            Cookies.set('refresh_token', action.payload?.data?.tokens?.refresh_token , { expires: 7 });
+            Cookies.set('access_token', action.payload?.data?.tokens?.access_token , { expires: 7 });
             return {
                 ...state,
                 isLoading: false,

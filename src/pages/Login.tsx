@@ -1,7 +1,11 @@
-import React, {useState} from "react";
-import {Box, Button, Stack, TextField, Typography} from "@mui/material";
+import React, {useState, FC, useEffect} from "react";
+import {Box, Button, Snackbar, Stack, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {ROUTES} from "../const/Routes.ts";
+import MuiAlert from '@mui/material/Alert';
+import {RootState, store} from "../redux/store.ts";
+import {login} from "../redux/login-signup/login-slice.ts";
+import {connect} from "react-redux";
 
 type StateObj = {
     username: string;
@@ -10,7 +14,7 @@ type StateObj = {
 
 type AlertColor = 'success' | 'error' | 'info' | 'warning';
 
-const Login = () => {
+const Login: FC = (props: any) => {
     const navigate = useNavigate();
     const [stateObj, setStateObj] = useState<StateObj>({
         username: "",
@@ -31,7 +35,11 @@ const Login = () => {
             setMessageType('error');
             setMessage("Please fill both fields");
         } else {
-
+            const request = {
+                username: stateObj.username,
+                password: stateObj.password,
+            }
+            props.login(request);
         }
     };
 
@@ -51,12 +59,24 @@ const Login = () => {
         });
     };
 
-    const handleClose = (reason) => {
+    const handleClose = (reason: any) => {
         if (reason === 'clickaway') {
             return;
         }
         setOpen(false);
     };
+
+    useEffect(() => {
+        if (props.isLoggedIn) {
+            clearInputFields();
+            navigate('/' + ROUTES.HOME, { replace: true });
+        }
+        if (props.error !== null) {
+            setOpen(true);
+            setMessageType('error');
+            setMessage(props.error?.reason || "Internal Server Error");
+        }
+    }, [props.isLoggedIn, props.error]);
 
     return (
         <React.Fragment>
@@ -157,4 +177,19 @@ const Login = () => {
     );
 };
 
-export default Login;
+const mapStateToProps = (state: RootState) => {
+    return {
+        isLoading: state.loginSignup.isLoading,
+        error: state.loginSignup.error,
+        isLoggedIn: state.loginSignup.isLoggedIn,
+    };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        login: (request: any) => dispatch(login(request)),
+    };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export default connector(Login);
