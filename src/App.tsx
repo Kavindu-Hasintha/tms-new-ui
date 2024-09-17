@@ -5,6 +5,7 @@ import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import {ROUTES} from "./const/Routes.ts";
 import OTPPage from "./pages/OTPPage.tsx";
+import Home from "./pages/Home.tsx";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
             <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.SIGNUP} element={<Signup />} />
             <Route path={ROUTES.OTP} element={<OTPPage />} />
+            <Route path={ROUTES.HOME} element={<Home />} />
         </Routes>
     </Router>
   );
