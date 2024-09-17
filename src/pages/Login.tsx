@@ -1,22 +1,62 @@
-import React from "react";
+import React, {useState} from "react";
 import {Box, Button, Stack, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {ROUTES} from "../const/Routes.ts";
 
+type StateObj = {
+    username: string;
+    password: string;
+}
+
+type AlertColor = 'success' | 'error' | 'info' | 'warning';
+
 const Login = () => {
     const navigate = useNavigate();
+    const [stateObj, setStateObj] = useState<StateObj>({
+        username: "",
+        password: "",
+    });
+    const [open, setOpen] = useState(false);
+    const [messageType, setMessageType] = useState<AlertColor>('success');
+    const [message, setMessage] = useState('');
+
+    function handleInput(event){
+        const { name, value } = event.target;
+        setStateObj({ ...stateObj, [name]: value });
+    };
 
     function handleLogIn() {
-        console.log("log in...");
-    }
+        if (stateObj.username === "" || stateObj.password === "") {
+            setOpen(true);
+            setMessageType('error');
+            setMessage("Please fill both fields");
+        } else {
+
+        }
+    };
 
     function handleForgotPassword() {
         navigate('/' + ROUTES.OTP, { replace: true });
-    }
+    };
 
     function handleCreateAccount() {
         navigate('/' + ROUTES.SIGNUP, { replace: true });
-    }
+    };
+
+    function clearInputFields() {
+        setStateObj({
+            ...stateObj,
+            username: "",
+            password: ""
+        });
+    };
+
+    const handleClose = (reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
     return (
         <React.Fragment>
@@ -48,8 +88,23 @@ const Login = () => {
                             LogIn
                         </Typography>
 
-                        <TextField id="standard-basic" label="Username" variant="standard" />
-                        <TextField id="standard-basic" label="Password" variant="standard" type="password" />
+                        <TextField
+                            id="username"
+                            label="Username"
+                            variant="standard"
+                            name={"username"}
+                            value={stateObj.username}
+                            onChange={handleInput}
+                        />
+                        <TextField
+                            id="pasword"
+                            label="Password"
+                            variant="standard"
+                            name={"password"}
+                            value={stateObj.password}
+                            onChange={handleInput}
+                            type="password"
+                        />
 
                         <Button
                             variant="outlined"
@@ -83,6 +138,20 @@ const Login = () => {
                         </Button>
                     </Stack>
                 </Box>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={5000}
+                    onClose={handleClose}
+                    anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
+                    <MuiAlert
+                        onClose={handleClose}
+                        severity={messageType}
+                        variant="filled"
+                        sx={{width: '100%'}}
+                    >
+                        {message}
+                    </MuiAlert>
+                </Snackbar>
             </Box>
         </React.Fragment>
     );
